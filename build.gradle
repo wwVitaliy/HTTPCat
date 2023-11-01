@@ -12,6 +12,13 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.16.2'
+
+    // https://mvnrepository.com/artifact/com.github.stefanbirkner/system-lambda
+    testImplementation group: 'com.github.stefanbirkner', name: 'system-lambda', version: '1.2.1'
+
 }
 
 test {
