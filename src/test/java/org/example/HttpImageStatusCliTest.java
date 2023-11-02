@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.InputMismatchException;
 
 import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut;
 import static com.github.stefanbirkner.systemlambda.SystemLambda.withTextFromSystemIn;
@@ -35,22 +36,8 @@ class HttpImageStatusCliTest {
     }
 
     @Test
-    void testWrongCode1000() {
+    void testWrongCode1000() throws Exception {
         int code = 1000;
-
-        assertThrows(Exception.class, () -> {
-            tapSystemOut(() -> {
-                withTextFromSystemIn(String.valueOf(code))
-                        .execute(() -> {
-                            CLI.askStatus();
-                        });
-            });
-        });
-    }
-
-    @Test
-    void testWrongCodeText() throws Exception {
-        String code = "someText";
 
         String text = tapSystemOut(() -> {
             withTextFromSystemIn(String.valueOf(code))
@@ -59,7 +46,19 @@ class HttpImageStatusCliTest {
                     });
         });
 
-        assertEquals(CLI_WRONG_CODE_MESSAGE, text.trim());
+        assertEquals(WRONG_CODE_MESSAGE + code, text.trim());
+    }
+
+    @Test
+    void testWrongCodeText() throws Exception {
+        String code = "someText";
+
+        assertThrows(InputMismatchException.class, ()->{
+            withTextFromSystemIn(String.valueOf(code))
+                    .execute(() -> {
+                        CLI.readCodeFromConsole();
+                    });
+        });
     }
 
 }
